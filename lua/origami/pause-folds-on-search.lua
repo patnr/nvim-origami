@@ -10,6 +10,8 @@ vim.opt.foldopen:remove { "search" }
 
 local ns = vim.api.nvim_create_namespace("auto_pause_folds")
 
+local minianimate_disable = vim.g.minianimate_disable
+
 vim.on_key(function(char)
 	if vim.g.scrollview_refreshing then return end -- FIX https://github.com/dstein64/nvim-scrollview/issues/88#issuecomment-1570400161
 	local key = vim.fn.keytrans(char)
@@ -28,7 +30,9 @@ vim.on_key(function(char)
 	local unpauseFold = foldsArePaused and (searchCancelled or not searchMovement)
 	if pauseFold then
 		vim.opt_local.foldenable = false
+		vim.g.minianimate_disable = true
 	elseif unpauseFold then
+		vim.g.minianimate_disable = minianimate_disable
 		vim.opt_local.foldenable = true
 		pcall(vim.cmd.foldopen, { bang = true }) -- after closing folds, keep the *current* fold open
 	end
