@@ -12,6 +12,9 @@ local ns = vim.api.nvim_create_namespace("auto_pause_folds")
 
 vim.on_key(function(char)
 	if vim.g.scrollview_refreshing then return end -- FIX https://github.com/dstein64/nvim-scrollview/issues/88#issuecomment-1570400161
+	if vim.g.snacks_currently_scrolling then return end -- similar to above, relies on my fork of snacks
+   -- The above fixes the worst compatibility issues with scrolling,
+   -- but the winrestview() below still makes scrolling cause jumpiness.
 	local key = vim.fn.keytrans(char)
 	local isCmdlineSearch = vim.fn.getcmdtype():find("[/?]") ~= nil
 	local isNormalMode = vim.api.nvim_get_mode().mode == "n"
